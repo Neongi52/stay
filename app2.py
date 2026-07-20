@@ -27,7 +27,7 @@ with col2:
             st.error("시작 버튼을 먼저 눌러주세요!")
         else:
             # 현재 시간을 종료 시간으로 기록
-            st.session_state.end_time = time.time(1)
+            st.session_state.end_time = time.time()
 
 # 2. 결과 출력 로직
 if st.session_state.start_time and st.session_state.end_time:
