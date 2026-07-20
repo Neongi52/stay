@@ -10,6 +10,7 @@ def reset_all():
     st.session_state.shoes = "스니커즈"
     st.session_state.acc = []
 
+st button("전체 초기화", on_click=reset_all)
 with st.sidebar:
     st.header("프로필")
     user_name = st.text_input("닉네임")
