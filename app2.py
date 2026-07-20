@@ -23,11 +23,11 @@ with col1:
 with col2:
     if st.button("종료"):
         # 조건 1: 시작 버튼을 누르지 않고 종료를 누른 경우 경고 출력
-        # 조건 2: 종료 버튼을 누르면 시간 중단
+        # 조건 2: 시작 버튼 1번 눌렀을때 종료버튼을 2번이상 누르면 경고 메세지
         if st.session_state.start_time is None:
             st.error("시작 버튼을 먼저 눌러주세요!")
         else:
-            # 현재 시간을 종료 시간으로 기록
+            # 종료 시간을 종료 시간으로 기록
             st.session_state.end_time = time.time()
 
 # 2. 결과 출력 로직
