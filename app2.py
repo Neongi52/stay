@@ -21,13 +21,16 @@ with col1:
         st.rerun()
 
 with col2:
-    if st.button("종료"):
-        # 조건 1: 시작 버튼을 누르지 않고 종료를 누른 경우 경고 출력
+    is_already_ended = st.session_state.end_time is not None
+    
+    if st.button("종료", disabled=is_already_ended):
+        # 시작 버튼을 안 누르고 종료부터 누른 경우 예외 처리
         if st.session_state.start_time is None:
             st.error("시작 버튼을 먼저 눌러주세요!")
         else:
             # 현재 시간을 종료 시간으로 기록
             st.session_state.end_time = time.time()
+            st.rerun()
 
 # 2. 결과 출력 로직
 if st.session_state.start_time and st.session_state.end_time:
