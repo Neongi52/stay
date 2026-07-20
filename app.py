@@ -10,10 +10,10 @@ def reset_all():
     st.session_state.shoes = "스니커즈"
     st.session_state.acc = []
 
-st button("전체 초기화", on_click=reset_all)
+st.button("전체 초기화", on_click=reset_all)
 with st.sidebar:
     st.header("프로필")
-    user_name = st.text_input("닉네임")
+    user_name = st.text_input("닉네임", key="user_name")
     weather = st.selectbox("오늘 날씨", ["맑음", "흐림", "비/눈", "매우 추움"])
     st.markdown("---")
     st.write(f"반가워요, {user_name}님! 오늘 날씨는 '{weather}'이네요.")
