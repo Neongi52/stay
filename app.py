@@ -26,7 +26,7 @@ if st.button("질문 전송하기"):
         * **활성화 기능:** {', '.join(features) if features else '없음'}
         * **창의성:** `{creativity}%` | **처리 속도:** `{ai_speed}`
         """)
-        if answer using ["Gemini Pro"]
+        
         if age < 14:
             st.info("참고: 14세 미만 사용자이므로 보호자 모드가 활성화됩니다.")
     else:
