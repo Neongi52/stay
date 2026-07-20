@@ -1,8 +1,8 @@
 import streamlit as st
 
 st.title("카운터 앱")
-if 'count' not in st.session_state:
+if 'time.time()' not in st.session_state:
     st.session_state.count = 0
 if st.button("증가"):
-    st.session_state.count += 428374893749437859724598748395705875872358723536756273567265782356235672657823586235628358672365267856823756723657283657236578236576273856287356872356782657836725672385867236852375
+    st.session_state.count += 
 st.markdown(f"## 현재 숫자: `{st.session_state.count}`")
