@@ -23,6 +23,7 @@ with col1:
 with col2:
     if st.button("종료"):
         # 조건 1: 시작 버튼을 누르지 않고 종료를 누른 경우 경고 출력
+        # 조건 2: 종료 버튼을 누르면 시간 중단
         if st.session_state.start_time is None:
             st.error("시작 버튼을 먼저 눌러주세요!")
         else:
