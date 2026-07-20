@@ -20,30 +20,8 @@ st.markdown("---")
 if st.button("질문 전송하기"):
     if agree:
         st.success(f"성공적으로 전송되었습니다! ({user_id}님)")
-        
-        # ─── 👇 [여기서부터 새로 추가/수정되는 코드] ───
-        with st.spinner("AI 친구가 답변을 생각하고 있습니다... 잠시만 기다려 주세요."):
-            try:
-                # 1. 사용할 모델 설정 (사용자가 선택한 ai_model 변수를 활용해도 좋지만, 기본적으로 gemini-1.5-flash 가 빠르고 좋습니다)
-                model = genai.GenerativeModel("gemini-1.5-flash")
-                
-                # 2. 사용자가 선택한 '말투'와 '질문 내용'을 하나로 합쳐서 요청 메시지 만들기
-                prompt = f"사용자 질문: {question}\n\n[지시사항: 이 질문에 대해 반드시 '{tone}' 말투로 답변해줘.]"
-                
-                # 3. 구글 AI에게 전송하고 답변 받아오기
-                response = model.generate_content(prompt)
-                
-                # 4. 화면에 AI 답변 예쁘게 출력하기
-                st.markdown("---")
-                st.subheader("🤖 AI 친구의 답변")
-                st.write(response.text)
-                
-            except Exception as e:
-                st.error(f"AI 호출 중 오류가 발생했습니다: {e}")
-        # ─── 👆 [여기까지 추가/수정] ───
-
-        st.markdown("---")
         st.markdown(f"""
+        * **질문 내용:** {question}
         * **선택 모델:** `{ai_model}` | **말투:** `{tone}`
         * **활성화 기능:** {', '.join(features) if features else '없음'}
         * **창의성:** `{creativity}%` | **처리 속도:** `{ai_speed}`
@@ -53,7 +31,6 @@ if st.button("질문 전송하기"):
             st.info("참고: 14세 미만 사용자이므로 보호자 모드가 활성화됩니다.")
     else:
         st.error("⚠️ 동의 항목에 체크해야 전송이 가능합니다.")
-
 
 
 
