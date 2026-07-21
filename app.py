@@ -78,14 +78,25 @@ def page_report():
             st.rerun()
 
 def page_ai_coach():
-    st.header("AI 코치와 대화하🤖")
+    st.header("AI 코치와 대화하기🤖")
     prompt = st.text_input("질문을 입력하세요")
+    
     if st.button("보내기"):
-        response = ai_client.response.create(
-            model="gpt-5.4-mini",
-            input=prompt
-        )
-        st.write(response.output_text)
+        if prompt.strip():
+            try:
+                # 84~86번 줄의 잘못된 호출 방식을 공식 OpenAI 문법으로 수정합니다.
+                response = ai_client.chat.completions.create(
+                    model="gpt-4o-mini",  # gpt-5.4-mini 대신 실제 존재하는 모델명을 사용합니다.
+                    messages=[
+                        {"role": "user", "content": prompt}
+                    ]
+                )
+                # 답변 출력 부분 수정
+                st.write(response.choices[0].message.content)
+            except Exception as e:
+                st.error(f"API 호출 중 오류가 발생했습니다: {e}")
+        else:
+            st.warning("질문을 입력하고 보내기 버튼을 눌러주세요!")
 
 pg = st.navigation([
     st.Page(page_motto, title="오늘의 다짐", icon="📣"),
