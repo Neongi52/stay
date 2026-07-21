@@ -3,6 +3,6 @@ from openai import OpenAI
 
 ai_client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-st.header("영어공부 도우미")
-gram, voca, talk = st.colums(3)
+if 'grammar_list' not in st.session_state:
+  st.session_state.grammar_list = []
 
