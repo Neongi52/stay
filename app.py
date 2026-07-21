@@ -12,6 +12,7 @@ def add_todo():
         st.toast("할 일이 추가되었습니다!")
         st.session_state.todo_input = ""
 
+@st.dialog("오늘의 다짐 수정")
 def page1():
     st.title("🌱 갓생 살기 플래너")
     st.header("📣 1. 오늘의 다짐")
