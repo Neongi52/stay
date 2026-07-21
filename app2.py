@@ -23,3 +23,7 @@ with tap1:
 
 user_sentence = st.text_area("분석할 영어 문장을 입력하세요")
 
+if st.button("AI분석 시작", type="primary"):
+  if user_sentence.strip():
+    prompt = f"""
+
