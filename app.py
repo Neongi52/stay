@@ -64,19 +64,23 @@ def page3():
             st.session_state.todo_list = []
             st.rerun()
 
-pg = st.navigation([
-    st.Page(page1, title="오늘의 다짐"),
-    st.Page(page2, title="오늘의 할 일"),
-    st.Page(page3, title="나의 갓생 지수"),
-    st.Page(page_ai_coach, title="🤖 AI 코치와 대화하기"])
-pg.run()
-
 def page_ai_coach():
     st.header("🤖 AI 코치와 대화하기")
     prompt = st.text_input("질문을 입력하세요")
     if st.button("보내기"):
-        response = ai_client.response.create(
-            model="gpt-5.4-mini",
-            input=prompt
+        response = ai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
         )
-        st.write(response.output_text)
+        st.write(response.choices[0].message.content)
+
+# 2. 페이지 설정 및 실행 (가장 아래에 위치)
+pg = st.navigation([
+    st.Page(page1, title="오늘의 다짐"),
+    st.Page(page2, title="오늘의 할 일"),
+    st.Page(page3, title="나의 갓생 지수"),
+    st.Page(page_ai_coach, title="🤖 AI 코치와 대화하기")
+])
+pg.run()
