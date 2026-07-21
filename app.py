@@ -69,7 +69,6 @@ def page_ai_coach():
     if "messages" not in st.session_state:
        with st.chat_message(message["rol"]):
            st.markdown(message["content"])
-        st.write(response.choices[0].message.content)
 
 # 2. 페이지 설정 및 실행 (가장 아래에 위치)
 pg = st.navigation([
