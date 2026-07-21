@@ -27,30 +27,51 @@ with t1:
             st.info(res.choices[0].message.content)
 
 with t2:
+    # 1. 퀴즈 출제 버튼
     if st.button("퀴즈 출제"):
-        with st.spinner("출제 중..."):
-            res = ai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": "고등학교 필수 영단어 객관식 퀴즈를 JSON 형식을 지켜서 만들어줘. 양식: {'word':'단어', 'meaning':'정답뜻', 'options':['1','2','3','4']}"}],
-                response_format={"type": "json_object"}
-            )
-            st.session_state.q = json.loads(res.choices[0].message.content)
-            st.session_state.chk = False
+        with st.spinner("새로운 퀴즈를 생성하는 중..."):
+            try:
+                # OpenAI API를 통해 JSON 형태의 응답을 유도
+                res = ai_client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {
+                            "role": "system", 
+                            "content": "You must respond ONLY with a JSON object. Format: {\"word\": \"영어단어\", \"meaning\": \"뜻\"}"
+                        },
+                        {
+                            "role": "user", 
+                            "content": "랜덤한 토익 필수 영단어 1개와 그 뜻을 JSON 형식으로 출제해줘."
+                        }
+                    ],
+                    response_format={"type": "json_object"} # JSON 모드 강제 (선택 사항)
+                )
+                
+                # API 결과를 딕셔너리로 변환하여 '세션 상태'에 저장 🌟
+                result_dict = json.loads(res.choices[0].message.content)
+                st.session_state.q = result_dict
+                
+            except Exception as e:
+                st.error(f"퀴즈를 생성하는 중 오류가 발생했습니다: {e}")
 
-    if st.session_state.q:
-        q = st.session_state.q
-        st.markdown(f"### **{q['word']}**의 뜻은?")
-        ans = st.radio("보기:", q['options'])
+    # --- 화면에 퀴즈를 그려주는 부분 ---
+    st.write("---") # 구분선
+    
+    # 2. 세션 상태에 퀴즈 데이터가 존재하는지 확인 후 출력 🌟
+    if st.session_state.q is not None:
+        # 일반 변수 q가 아니라 st.session_state.q에서 키를 가져옵니다.
+        current_word = st.session_state.q.get('word', '알 수 없는 단어')
+        correct_meaning = st.session_state.q.get('meaning', '')
+
+        st.markdown(f"### 🎯 **{current_word}**의 뜻은?")
         
-        c1, c2 = st.columns(2)
-        if c1.button("정답 확인"): st.session_state.chk = True
-        if c2.button("단어장 추가") and {"word": q['word'], "meaning": q['meaning']} not in st.session_state.vocab:
-            st.session_state.vocab.append({"word": q['word'], "meaning": q['meaning']})
-            st.toast("추가 완료!")
+        # 정답 확인용 간단한 토글 토글 (정답 보기 버튼 대신 확장러 사용)
+        with st.expander("정답 확인하기"):
+            st.success(f"정답은 **'{correct_meaning}'** 입니다!")
             
-        if st.session_state.get('chk'):
-            if q['meaning'] in ans: st.success("정답입니다! 🎉")
-            else: st.error(f"오답! 정답은: {q['meaning']}")
+    else:
+        # 데이터가 아직 없을 때 보여줄 안내 메시지
+        st.info("💡 위의 '퀴즈 출제' 버튼을 누르면 영어 단어 퀴즈가 시작됩니다.")
 
 with t3:
     with st.expander("단어 직접 추가"):
