@@ -9,7 +9,7 @@ def add_todo():
     task = st.session_state.todo_input
     if task:
         st.session_state.todo_list.append([task, False])
-        st.toast("할 일이 추가되었습니다!")
+        st.toast("지예ㅏㅇ")
         st.session_state.todo_input = ""
 
 @st.dialog("오늘의 다짐 수정")
