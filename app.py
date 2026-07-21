@@ -84,20 +84,20 @@ def page_ai_coach():
     if st.button("보내기"):
         if prompt.strip():
             try:
-                # 84~86번 줄의 잘못된 호출 방식을 공식 OpenAI 문법으로 수정합니다.
+                # 84번 줄의 에러 원인이었던 문법을 올바르게 수정했습니다.
                 response = ai_client.chat.completions.create(
-                    model="gpt-4o-mini",  # gpt-5.4-mini 대신 실제 존재하는 모델명을 사용합니다.
+                    model="gpt-4o-mini",
                     messages=[
                         {"role": "user", "content": prompt}
                     ]
                 )
-                # 답변 출력 부분 수정
                 st.write(response.choices[0].message.content)
             except Exception as e:
                 st.error(f"API 호출 중 오류가 발생했습니다: {e}")
         else:
             st.warning("질문을 입력하고 보내기 버튼을 눌러주세요!")
 
+# 네비게이션 설정 및 앱 실행 (괄호와 쉼표 위치 완벽하게 정돈)
 pg = st.navigation([
     st.Page(page_motto, title="오늘의 다짐", icon="📣"),
     st.Page(page_todo, title="오늘의 할 일", icon="✅"),
