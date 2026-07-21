@@ -67,7 +67,8 @@ def page3():
 pg = st.navigation([
     st.Page(page1, title="오늘의 다짐"),
     st.Page(page2, title="오늘의 할 일"),
-    st.Page(page3, title="나의 갓생 지수")])
+    st.Page(page3, title="나의 갓생 지수"),
+    st.Page(page_ai_coach, title="🤖 AI 코치와 대화하기"])
 pg.run()
 
 def page_ai_coach():
