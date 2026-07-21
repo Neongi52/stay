@@ -13,7 +13,7 @@ else:
 if 'vocab' not in st.session_state: st.session_state.vocab = []
 if 'q' not in st.session_state: st.session_state.q = None
 
-st.title("🔤 AI 영어 공부 헬퍼")
+st.title("🔤 AI 영어 공부")
 t1, t2, t3 = st.tabs(["📝 문장 분석", "🎯 단어 퀴즈", "📖 단어장"])
 
 with t1:
