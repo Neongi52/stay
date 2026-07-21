@@ -1,64 +1,60 @@
 import streamlit as st
 
-def reset_all():
-    st.session_state.user_name = ""
-    st.session_state.weather = "맑음"
-    st.session_state.top_type = "후드티"
-    st.session_state.top_color = "밝음"
-    st.session_state.bottom_type = "청바지"
-    st.session_state.bottom_color = "슬림"
-    st.session_state.shoes = "스니커즈"
-    st.session_state.acc = []
+if 'todo_list' not in st.session_state:
+    st.session_state.todo_list = []
+if 'user_motto' not in st.session_state:
+    st.session_state.user_motto = "오늘도 화이팅!"
 
-st.button("전체 초기화", on_click=reset_all)
-with st.sidebar:
-    st.header("프로필")
-    user_name = st.text_input("닉네임", key="user_name")
-    weather = st.selectbox("오늘 날씨", ["맑음", "흐림", "비/눈", "매우 추움"], key="weather")
-    st.markdown("---")
-    st.write(f"반가워요, {user_name}님! 오늘 날씨는 '{weather}'이네요.")
+def add_todo():
+    task = st.session_state.todo_input
+    if task:
+        st.session_state.todo_list.append([task, False])
+        st.toast("할 일이 추가되었습니다!")
+        st.session_state.todo_input = ""
 
-st.title("👗 AI 코디 메이커")
-st.write("사이드바에서 날씨를 먼저 선택하고 코디를 시작하세요!") 
-
-st.header("👕 아이템 조합하기") 
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader("상의")
-    top_type = st.radio("종류", ["후드티", "셔츠", "맨투맨", "반팔 티셔츠"])
-    top_color = st.select_slider("생상 톤", options=["밝음", "무난함", "어두움"])
-with col2:
-    st.subheader("하의")
-    bottom_type = st.radio("종류", ["청바지", "슬랙스", "트레이닝 팬츠", "반바지"])
-    bottom_color = st.select_slider("핏(Fit)", options=["슬림", "레귤러", "오버핏"])
-st.header("디테일 추가")
-tab1, tab2 = st.tabs(["신발", "액세서리"])
-with tab1:
-    st.write("오늘의 발걸음을 책임질 신발:")
-    shoes = st.selectbox("신발 선택", ["스니커즈", "운동화", "구두", "슬리퍼"])
-    with st.expander("신발 선택 팁 보기"):
-        st.info("너무 튀는 신발은 지양하도록 해요!")
-with tab2:
-    st.write("포인트 아이템:")
-    acc = st.multiselect("액세서리 추가", ["모자", "안경", "목걸이", "가방"])
-    with st.expander("액세서리 스타일링 팁 보기"):
-        st.warning("너무 많은 액세서리는 투머치가 될 수 있어요.")
+st.title("🌱 갓생 살기 플래너")
+st.header("📣 1. 오늘의 다짐")
+motto = st.text_input("나의 한 줄 좌우명을 적어주세요")
+if st.button("다짐 저장"):
+    st.session_state.user_motto = motto
+    st.success("좌우명이 등록되었습니다!")
 st.markdown("---")
-if st.button("코디 완성하기"):
-    with st.container(border=True):
-        st.subheader(f"{user_name}님의 오늘의 룩북")
-        st.write(f"오늘 같은 **{weather}** 날씨에는 이렇게 입어보세요!")
-        st.markdown(f"""
-        * **상의:** {top_color} {top_type}
-        * **하의:** {bottom_color} {bottom_type}
-        * **매칭:** {shoes}와 {', '.join(acc) if acc else '악세서리 없이 깔끔하게!'}
-        """)
-        st.success("오늘의 스타일링이 완성되었습니다! 자신 있게 외출하세요!")
 
-with st.expander("코디 연출 팁 영상 보기"):
-    st.video("https://youtu.be/SnRvPkzWzhg?si=F7dF256fTuxxrL2x")
-    st.write("전문가가 제안하는 코디 연출법을 참고해 보세요.")
+st.header("✅ 2. 오늘의 할 일")
+st.write(f"현재 다짐: **{st.session_state.user_motto}**")
+new_todo = st.text_input("추가할 할 일을 입력하세요", key="todo_input")
+st.button("추가하기", on_click=add_todo)
+if new_todo == "":
+    st.warning("할 일을 입력하고 버튼을 눌러주세요!")
 
+st.markdown("---")
+for i in range(len(st.session_state.todo_list)):
+    col_task, col_btn, col_status = st.columns([4, 1, 1])
+    with col_task:
+        st.write(f"{i+1}. {st.session_state.todo_list[i][0]}")
+    with col_btn:
+        if st.button("완료", key=f"btn_{i}"):
+            st.session_state.todo_list[i][1] = True
+            st.rerun()
+    with col_status:
+        if st.session_state.todo_list[i][1]:
+            st.write("✅ **달성!**")
+st.markdown("---")
 
+st.header("📈 3. 나의 갓생 지수")
+if not st.session_state.todo_list:
+    st.write("아직 등록된 할 일이 없습니다.")
+else:
+    total = len(st.session_state.todo_list)
+    count = 0
+    for item in st.session_state.todo_list:
+        if item[1] == True:
+            count += 1
+    progress = (count / total) * 100
+    st.metric("오늘의 달성률", f"{progress:.1f}%")
+    st.progress(progress / 100)
+    if st.button("기록 전체 초기화"):
+        st.session_state.todo_list = []
+        st.rerun()
 
 
