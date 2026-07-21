@@ -66,14 +66,9 @@ def page3():
 
 def page_ai_coach():
     st.header("🤖 AI 코치와 대화하기")
-    prompt = st.text_input("질문을 입력하세요")
-    if st.button("보내기"):
-        response = ai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
+    if "messages" not in st.session_state:
+       with st.chat_message(message["rol"]):
+           st.markdown(message["content"])
         st.write(response.choices[0].message.content)
 
 # 2. 페이지 설정 및 실행 (가장 아래에 위치)
